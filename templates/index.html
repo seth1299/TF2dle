@@ -62,31 +62,6 @@
             background-color: white;
             color: black;
         }
-        #settingsMenu {
-        display: none; /* Hide settings menu by default */
-        position: absolute; /* Allow it to float above other content */
-        top: 10%; /* Position from the top */
-        right: 10%; /* Position from the right */
-        background-color: white; /* White background for settings menu */
-        color: black; /* Black text color for settings menu */
-        border: 1px solid #ccc; /* Optional: add a border */
-        padding: 10px; /* Add some padding */
-        z-index: 1000; /* Make sure it’s above other content */
-      }
-      .settingsButton {
-        position: absolute;
-        top: 10px; /* Position it at the top */
-        right: 10px; /* Align it to the right */
-        background-color: white; /* Button background */
-        color: black; /* Button text color */
-        border: 1px solid black; /* Button border */
-        cursor: pointer; /* Change cursor to pointer on hover */
-      }
-
-      /* Add hover effects for better UX */
-      .settingsButton:hover {
-        background-color: #f0f0f0; /* Lighten on hover */
-      }
     </style>
 </head>
 <body>
@@ -95,49 +70,15 @@
 
     <div id="credits" style="position: absolute; top: 10px; left: 10px; color: white; margin:0; padding:0;">
       Created by Seth Grimes in 2024 using Python, HTML, CSS, and SQL.<br> 
-     Deployed using a Gunicorn web dyno and web hosted using Heroku.
+     Deployed using a Gunicorn web dyno and web hosted using Heroku.<br>
+     Like this game? Play my XCOM Wordle next!<br>
+     https://xcomdle-bc65cf2ffef5.herokuapp.com/
     </div>
 
     <!-- Container for the Replay Button -->
     <div id="replay-container" style="display: flex; justify-content: center; margin-top: 20px;">
       <button id="replay-button" style="display: none; padding: 20px; font-size: 18px;" onclick="resetGame()">Replay</button>
     </div>
-
-    <!-- Settings button -->
-    <button class="settingsButton" onclick="toggleSettingsMenu()">
-      Settings
-  </button>
-
-  <!-- Settings menu -->
-  <div id="settingsMenu">
-      <h3>Settings</h3>
-      <label for="fontSelect">Font:</label>
-      <select id="fontSelect" onchange="changeFont()">
-          <option value="Arial">Arial</option>
-          <option value="Courier New">Courier New</option>
-          <option value="Times New Roman">Times New Roman</option>
-          <option value="Georgia">Georgia</option>
-          <option value="Verdana">Verdana</option>
-      </select>
-      <br /><br />
-      <label for="fontSize">Font Size:</label>
-      <input
-          type="number"
-          id="fontSize"
-          value="16"
-          onchange="changeFontSize()" />
-      <br /><br />
-      <label for="fontColor">Font Color:</label>
-      <input type="color" id="fontColor" onchange="changeFontColor()" />
-      <br /><br />
-      <label for="backgroundColor">Background Color:</label>
-      <input
-          type="color"
-          id="backgroundColor"
-          onchange="changeBackgroundColor()" />
-      <br /><br />
-      <button onclick="toggleSettingsMenu()">Close</button>
-  </div>
 
 
     <div id="search-container">
@@ -157,9 +98,6 @@
         <tbody id="guesses-body">
         </tbody>
     </table>
-
-    
-
 
     <script>
         let hiddenWeapon = null;
