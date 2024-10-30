@@ -173,48 +173,47 @@ def update_duplicate_weapons(conn):
     # Get all weapons from the database
     weapons = conn.execute("SELECT id, name, class, slot FROM weapons").fetchall()
     
-    # Create a dictionary to track weapon counts
+    # Create a dictionary to track weapon counts with slots
     weapon_count = {}
 
     for weapon in weapons:
-        weapon_name = weapon[1] # Index 1 corresponds to 'name'
-        weapon_class = weapon[2] # Index 2 corresponds to 'class'
-        weapon_slot = weapon[3]
+        weapon_name = weapon[1]  # Index 1 corresponds to 'name'
+        weapon_class = weapon[2]  # Index 2 corresponds to 'class'
+        weapon_slot = weapon[3]   # Index 3 corresponds to 'slot'
 
         # Create a key for the weapon name
         if weapon_name not in weapon_count:
             weapon_count[weapon_name] = []
 
-        # Append the class to the list of classes for this weapon
-        weapon_count[weapon_name].append(weapon_class)
+        # Append the class and slot as a tuple to the list of classes for this weapon
+        weapon_count[weapon_name].append((weapon_class, weapon_slot))
 
     # Update weapon names for duplicates
-    for weapon_name, classes in weapon_count.items():
-        strBuilder = ""
-        if len(classes) > 1:  # Only modify if there are duplicates
+    for weapon_name, class_slot_list in weapon_count.items():
+        if len(class_slot_list) > 1:  # Only modify if there are duplicates
+            # Build the combined class string
+            combined_classes = ", ".join([cls_slot[0] for cls_slot in class_slot_list])
             
-            for weapon_class in classes:
-                strBuilder += weapon_class + ", "
+            # Use the slot from the first occurrence
+            weapon_slot = class_slot_list[0][1]
+
+            # Delete all records with the same name
+            conn.execute("DELETE FROM weapons WHERE name = ?", [weapon_name])
+            if weapon_name != "Shotgun" and weapon_name != "B.A.S.E. Jumper":
+                # Insert the single record with combined classes and correct slot
+                conn.execute(
+                    "INSERT INTO weapons (name, class, slot) VALUES (?, ?, ?)",
+                    (weapon_name, combined_classes, weapon_slot)
+                )
+            else:
+                conn.execute(
+                "INSERT INTO weapons (name, class, slot) VALUES (?, ?, ?)",
+                (weapon_name, combined_classes, "Primary, Secondary")
+                )
                 
-            strBuilder = strBuilder[0:len(strBuilder)-2]
-            weapon = (weapon_name, strBuilder, weapon_slot)
-            
-            conn.execute("DELETE FROM weapons WHERE name = ?", [weapon_name])                    
-            insert_weapon(conn, weapon)
-            
-            #print(weapon_name, strBuilder)
-            
-            '''
-            for weapon_class in classes:
-                # Format the new name with the class
-                new_weapon_name = f"{weapon_name} ({weapon_class})"
-                
-                # Update the database for each weapon with this class
-                conn.execute("UPDATE weapons SET name = ? WHERE name = ? AND class = ?", (new_weapon_name, weapon_name, weapon_class))
-                
-            '''
 
     conn.commit()  # Commit the changes to the database
+
 
 
 # Main workflow

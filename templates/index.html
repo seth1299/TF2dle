@@ -152,11 +152,11 @@ function checkGuess(weapon) {
     <td style="background-color: ${weapon.name === hiddenWeapon.name ? 'green' : 'red'};">${weapon.name}</td>
     <td style="background-color: ${
         weapon.class === hiddenWeapon.class ? 'green' : 
-        (hiddenWeapon.class.includes(weapon.class) || weapon.class.includes(hiddenWeapon.class) ? 'yellow' : 'red')
+        (hiddenWeapon.class.includes(weapon.class) || weapon.class.includes(hiddenWeapon.class) || hiddenWeapon.class === 'All Classes'? 'yellow' : 'red')
     }">
         ${weapon.class}
     </td>
-    <td style="background-color: ${weapon.slot === hiddenWeapon.slot ? 'green' : 'red'};">${weapon.slot}</td>
+    <td style="background-color: ${weapon.slot === hiddenWeapon.slot ? 'green' : (hiddenWeapon.slot.includes(weapon.slot) || weapon.slot.includes(hiddenWeapon.slot) ? 'yellow' : 'red')};">${weapon.slot}</td>
 `;
 
 
