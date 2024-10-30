@@ -149,10 +149,13 @@ function checkGuess(weapon) {
     const newRow = document.createElement('tr');
 
     newRow.innerHTML = `
-        <td style="background-color: ${weapon.name === hiddenWeapon.name ? 'green' : 'red'};">${weapon.name}</td>
-        <td style="background-color: ${weapon.class === hiddenWeapon.class ? 'green' : 'red'};">${weapon.class}</td>
-        <td style="background-color: ${weapon.slot === hiddenWeapon.slot ? 'green' : 'red'};">${weapon.slot}</td>
-    `;
+    <td style="background-color: ${weapon.name === hiddenWeapon.name ? 'green' : 'red'};">${weapon.name}</td>
+    <td style="background-color: ${weapon.class === hiddenWeapon.class ? 'green' : (hiddenWeapon.class.includes(weapon.class) ? 'yellow' : 'red')}">
+        ${weapon.class}
+    </td>
+    <td style="background-color: ${weapon.slot === hiddenWeapon.slot ? 'green' : 'red'};">${weapon.slot}</td>
+`;
+
 
     guessesBody.appendChild(newRow);
 
