@@ -93,6 +93,7 @@
                 <th>Weapon</th>
                 <th>Class</th>
                 <th>Slot</th>
+                <th>Ammo</th>
             </tr>
         </thead>
         <tbody id="guesses-body">
@@ -157,7 +158,8 @@ function checkGuess(weapon) {
         ${weapon.class}
     </td>
     <td style="background-color: ${weapon.slot === hiddenWeapon.slot ? 'green' : (hiddenWeapon.slot.includes(weapon.slot) || weapon.slot.includes(hiddenWeapon.slot) ? 'yellow' : 'red')};">${weapon.slot}</td>
-`;
+    <td style="background-color: ${weapon.ammo === hiddenWeapon.ammo ? 'green' : (hiddenWeapon.slot.includes(weapon.ammo) || weapon.slot.includes(hiddenWeapon.ammo) ? 'yellow' : 'red')};">${weapon.ammo}</td>
+    `;
 
 
 
