@@ -171,7 +171,7 @@ def print_table(conn):
         
 def update_duplicate_weapons(conn):
     # Get all weapons from the database
-    weapons = conn.execute("SELECT id, name, class FROM weapons").fetchall()
+    weapons = conn.execute("SELECT id, name, class, slot FROM weapons").fetchall()
     
     # Create a dictionary to track weapon counts
     weapon_count = {}
@@ -179,6 +179,7 @@ def update_duplicate_weapons(conn):
     for weapon in weapons:
         weapon_name = weapon[1] # Index 1 corresponds to 'name'
         weapon_class = weapon[2] # Index 2 corresponds to 'class'
+        weapon_slot = weapon[3]
 
         # Create a key for the weapon name
         if weapon_name not in weapon_count:
@@ -189,13 +190,29 @@ def update_duplicate_weapons(conn):
 
     # Update weapon names for duplicates
     for weapon_name, classes in weapon_count.items():
+        strBuilder = ""
         if len(classes) > 1:  # Only modify if there are duplicates
+            
+            for weapon_class in classes:
+                strBuilder += weapon_class + ", "
+                
+            strBuilder = strBuilder[0:len(strBuilder)-2]
+            weapon = (weapon_name, strBuilder, weapon_slot)
+            
+            conn.execute("DELETE FROM weapons WHERE name = ?", [weapon_name])                    
+            insert_weapon(conn, weapon)
+            
+            #print(weapon_name, strBuilder)
+            
+            '''
             for weapon_class in classes:
                 # Format the new name with the class
                 new_weapon_name = f"{weapon_name} ({weapon_class})"
                 
                 # Update the database for each weapon with this class
                 conn.execute("UPDATE weapons SET name = ? WHERE name = ? AND class = ?", (new_weapon_name, weapon_name, weapon_class))
+                
+            '''
 
     conn.commit()  # Commit the changes to the database
 
