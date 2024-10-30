@@ -21,17 +21,17 @@ def index():
 @app.route('/api/weapons', methods=['GET'])
 def get_weapons():
     conn = get_db_connection()
-    weapons = conn.execute('SELECT name, class, slot FROM weapons').fetchall()
+    weapons = conn.execute('SELECT name, class, slot, ammo FROM weapons').fetchall()
     conn.close()
 
-    weapon_list = [{'name': weapon['name'], 'class': weapon['class'], 'slot': weapon['slot']} for weapon in weapons]
+    weapon_list = [{'name': weapon['name'], 'class': weapon['class'], 'slot': weapon['slot'], 'ammo': weapon['ammo']} for weapon in weapons]
     return jsonify(weapon_list)
 
 # API route to fetch a specific weapon by name
 @app.route('/api/weapons/<name>', methods=['GET'])
 def get_weapon_by_name(name):
     conn = get_db_connection()
-    weapon = conn.execute('SELECT name, class, slot FROM weapons WHERE name = ?', (name,)).fetchone()
+    weapon = conn.execute('SELECT name, class, slot, ammo FROM weapons WHERE name = ?', (name,)).fetchone()
     conn.close()
 
     if weapon is None:
